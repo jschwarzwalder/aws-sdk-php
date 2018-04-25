@@ -8,103 +8,59 @@
    either express or implied. See the License for the specific language governing permissions and
    limitations under the License.
 
-============================================
-Sending and Receiving Messages in Amazon SQS
-============================================
+
+=======================================
+Sending and Receiving Messages in |SQS|
+=======================================
 
 .. meta::
-   :description: Deliver, delete, or retrieve messages using Amazon SQS.
-   :keywords: Amazon SQS, AWS SDK for PHP examples
+   :description: Deliver, delete, or retrieve messages using Amazon SQS with the AWS SDK for PHP.
+   :keywords: Amazon SQS code examples for PHP
 
-To learn about Amazon SQS messages, see `Sending a Message to an Amazon SQS Queue <http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-send-message.html>`_ and `Receiving and Deleting a Message from an Amazon SQS Queue <http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-receive-delete-message.html>`_ in the Amazon Simple Queue Service Developer Guide.
+To learn about |SQS| messages, see :SQS-dg:`Sending a Message to an SQS Queue <sqs-send-message>`
+and :SQS-dg:`Receiving and Deleting a Message from an SQS Queue <sqs-receive-delete-message.html>`
+in the |SQS-dg|.
 
-The examples below show how to:
+The following examples show how to:
 
-* Deliver a message to a specified queue using `SendMessage <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#sendmessage>`_.
-* Retrieve one or more messages (up to 10) from a specified queue using `ReceiveMessage <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#receivemessage>`_.
-* Delete a message from a queue using `DeleteMessage <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#deletemessage>`_.
 
-All the example code for the AWS SDK for PHP is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
+* Deliver a message to a specified queue using :aws-php-class:`SendMessage <api-sqs-2012-11-05.html#sendmessage>`.
+* Retrieve one or more messages (up to 10) from a specified queue using :aws-php-class:`ReceiveMessage <api-sqs-2012-11-05.html#receivemessage>`.
+* Delete a message from a queue using :aws-php-class:`DeleteMessage <api-sqs-2012-11-05.html#deletemessage>`.
+
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 Credentials
 -----------
 
-Before running the example code, configure your AWS credentials, as described in :doc:`/guide/credentials`.
+Before running the example code, configure your AWS credentials. See :doc:`guide_credentials`.
 
 Send a Message
 --------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Sqs\SqsClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/sqs/SendMessage.php
+   :lines: 19-22
+   :language: PHP
 
-    $client = new SqsClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2012-11-05'
-    ]);
-    $params = [
-        'DelaySeconds' => 10,
-        'MessageAttributes' => [
-            "Title" => [
-                'DataType' => "String",
-                'StringValue' => "The Hitchhiker's Guide to the Galaxy"
-            ],
-            "Author" => [
-                'DataType' => "String",
-                'StringValue' => "Douglas Adams."
-            ],
-            "WeeksOn" => [
-                'DataType' => "Number",
-                'StringValue' => "6"
-            ]
-        ],
-        'MessageBody' => "Information about current NY Times fiction bestseller for week of 12/11/2016.",
-        'QueueUrl' => 'QUEUE_URL'
-    ];
-    try {
-        $result = $client->sendMessage($params);
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/sqs/SendMessage.php
+   :lines: 31-63
+   :language: php
 
 Receive and Delete Messages
 ---------------------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Sqs\SqsClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/sqs/ReceiveMessage.php
+   :lines: 19-22
+   :language: PHP
 
-    $queueUrl = "QUEUE_URL";
-    $client = new SqsClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2012-11-05'
-    ]);
-    try {
-        $result = $client->receiveMessage(array(
-            'AttributeNames' => ['SentTimestamp'],
-            'MaxNumberOfMessages' => 1,
-            'MessageAttributeNames' => ['All'],
-            'QueueUrl' => $queueUrl, // REQUIRED
-            'WaitTimeSeconds' => 0,
-        ));
-        if (count($result->get('Messages')) > 0) {
-            var_dump($result->get('Messages')[0]);
-            $result = $client->deleteMessage([
-                'QueueUrl' => $queueUrl, // REQUIRED
-                'ReceiptHandle' => $result->get('Messages')[0]['ReceiptHandle'] // REQUIRED
-            ]);
-        } else {
-            echo "No messages in queue. \n";
-        }
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/sqs/ReceiveMessage.php
+   :lines: 31-59
+   :language: php

@@ -9,16 +9,26 @@
    limitations under the License.
 
 =========
-Amazon S3
+|S3|
 =========
 
-Amazon Simple Storage Service (Amazon S3) is a web service that provides highly scalable cloud storage. Amazon S3 provides easy to use object storage, with a simple web service interface to store and retrieve any amount of data from anywhere on the web.
+.. meta::
+   :description: Amazon S3 code examples for AWS SDK for PHP.
+   :keywords: Amazon S3 PHP examples , AWS SDK for PHP examples, Amazon Simple Storage Service for PHP code examples
+
+|S3long|  (|S3|) is a web service that provides highly scalable cloud storage. |S3| provides easy to use object storage, with a simple web service interface to store and retrieve any amount of data from anywhere on the web.
+
+.. image:: images/code-samples-s3.png
+   :alt: Diagram that provides an overview of how AWS SDK for PHP connects to Amazon S3
+
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 .. toctree::
     :maxdepth: 1
 
-    s3-examples-configuring-a-bucket.rst
     s3-examples-creating-buckets.rst
     s3-examples-access-permissions.rst
+    s3-examples-configuring-a-bucket.rst
     s3-examples-static-web-host.rst
     s3-examples-bucket-policies.rst
+

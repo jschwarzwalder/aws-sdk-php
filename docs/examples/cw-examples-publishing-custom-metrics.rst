@@ -8,99 +8,55 @@
    either express or implied. See the License for the specific language governing permissions and
    limitations under the License.
 
-==============================================
-Publishing Custom Metrics in Amazon CloudWatch
-==============================================
+=====================================
+Publishing Custom Metrics in |CWlong|
+=====================================
 
 .. meta::
-   :description: Publish metric data and create alarms for Amazon CloudWatch.
-   :keywords: Amazon CloudWatch, AWS SDK for PHP examples
+   :description: Publish metric data and create alarms for Amazon CloudWatch using the AWS SDK for PHP.
+   :keywords: Amazon CloudWatch code examples for PHP
 
-Metrics are data about the performance of your systems. An alarm watches a single metric over a time period you specify, and performs one or more actions based on the value of the metric relative to a given threshold over a number of time periods.
+Metrics are data about the performance of your systems. An alarm watches a single metric over a time period you
+specify. It performs one or more actions based on the value of the metric, relative to a given threshold over a number of time periods.
 
-The examples below show how to:
+The following examples show how to:
 
-* Publish metric data using `PutMetricData <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-monitoring-2010-08-01.html#putmetricdata>`_.
-* Create an alarm using `PutMetricAlarm <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-monitoring-2010-08-01.html#putmetricalarm>`_.
+* Publish metric data using :aws-php-class:`PutMetricData </api-monitoring-2010-08-01.html#putmetricdata>`.
+* Create an alarm using :aws-php-class:`PutMetricAlarm </api-monitoring-2010-08-01.html#putmetricalarm>`.
 
-All the example code for the AWS SDK for PHP is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 Credentials
 -----------
 
-Before running the example code, configure your AWS credentials, as described in :doc:`/guide/credentials`.
+Before running the example code, configure your AWS credentials. See :doc:`guide_credentials`.
 
 Publish Metric Data
 -------------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\CloudWatch\CloudWatchClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/cloudwatch/PutMetricData.php
+   :lines: 19-22
+   :language: PHP
 
-    $client = new CloudWatchClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2010-08-01'
-    ]);
-    try {
-        $result = $client->putMetricData(array(
-            'Namespace' => 'string',
-            'MetricData' => array(
-                array(
-                    'MetricName' => 'string',
-                    //Timestamp : mixed type: string (date format)|int (unix timestamp)|\DateTime
-                    'Timestamp' => time(),
-                    'Value' => integer,
-                    'Unit' => 'Kilobytes'
-                )
-            )
-        ));
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/cloudwatch/PutMetricData.php
+   :lines: 31-54
+   :language: php
 
 Create an Alarm
 ---------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\CloudWatch\CloudWatchClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/cloudwatch/PutMetricAlarm.php
+   :lines: 19-22
+   :language: PHP
 
-    $client = new CloudWatchClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2010-08-01'
-    ]);
-    try {
-        $result = $client->putMetricAlarm(array(
-            // AlarmName is required
-            'AlarmName' => 'string',
-            // MetricName is required
-            'MetricName' => 'string',
-            // Namespace is required
-            'Namespace' => 'string',
-            // Statistic is required
-            //string: SampleCount | Average | Sum | Minimum | Maximum
-            'Statistic' => 'string',
-            // Period is required
-            'Period' => integer,
-            'Unit' => 'Count/Second',
-            // EvaluationPeriods is required
-            'EvaluationPeriods' => integer,
-            // Threshold is required
-            'Threshold' => interger,
-            // ComparisonOperator is required
-            // string: GreaterThanOrEqualToThreshold | GreaterThanThreshold | LessThanThreshold | LessThanOrEqualToThreshold
-            'ComparisonOperator' => 'string',
-        ));
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/cloudwatch/PutMetricAlarm.php
+   :lines: 31-63
+   :language: php

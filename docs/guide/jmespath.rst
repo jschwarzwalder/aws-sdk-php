@@ -1,35 +1,50 @@
-===============================
-JMESPath Expressions in the SDK
-===============================
+.. Copyright 2010-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
-`JMESPath <http://jmespath.org/>`_ allows you to declaratively specify how to
-extract elements from a JSON document. The AWS SDK for PHP has a dependency on
+   This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+   International License (the "License"). You may not use this file except in compliance with the
+   License. A copy of the License is located at http://creativecommons.org/licenses/by-nc-sa/4.0/.
+
+   This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions and
+   limitations under the License.
+
+=====================================
+JMESPath Expressions in the |sdk-php|
+=====================================
+
+.. meta::
+   :description: Extract JSON data from the AWS SDK for PHP.
+   :keywords: AWS SDK for PHP, Json, AWS results, paginators
+
+
+`JMESPath <http://jmespath.org/>`_ enables you to declaratively specify how to
+extract elements from a JSON document. The |sdk-php| has a dependency on
 `jmespath.php <https://github.com/jmespath/jmespath.php>`_ to power some of the
-high level abstractions like :doc:`paginators` and :doc:`waiters`, but also
+high-level abstractions like :doc:`guide_paginators` and :doc:`guide_waiters`, but also
 exposes JMESPath searching on ``Aws\ResultInterface`` and
 ``Aws\ResultPaginator``.
 
 You can play around with JMESPath in your browser by trying the online
 `JMESPath examples <http://jmespath.org/examples.html>`_. You can learn more
-about the language, including the available expressions and functions in the
+about the language, including the available expressions and functions, in the
 `JMESPath specification <http://jmespath.org/specification.html>`_.
 
-JMESPath is supported in the `AWS CLI <http://aws.amazon.com/cli/>`_.
-Expressions you write for CLI output are 100% compatible with expressions
-written for the AWS SDK for PHP.
+The `AWS CLI <http://aws.amazon.com/cli/>`_ supports JMESPath.
+Expressions you write for CLI output are 100 percent compatible with expressions
+written for the |sdk-php|.
 
-Extracting data from results
+Extracting Data from Results
 ----------------------------
 
 The ``Aws\ResultInterface`` interface has a ``search($expression)`` method that
 extracts data from a result model based on a JMESPath expression. Using
 JMESPath expressions to query the data from a result object can help to remove
-boilerplate conditional code and more concisely express the data that is being
+boilerplate conditional code, and more concisely express the data that is being
 extracted.
 
-To demonstrate how it works, we'll first start with the default JSON output
-below, which describes two EBS (Elastic Block Storage) volumes attached to
-separate Amazon EC2 instances.
+To demonstrate how it works, we'll start with the default JSON output
+below, which describes two |EBSlong| (|EBS|) volumes attached to
+separate |EC2| instances.
 
 .. code-block:: php
 
@@ -101,8 +116,8 @@ following command.
     $firstVolume = $result->search('Volumes[0]');
 
 Now, we use the ``wildcard-index`` expression ``[*]`` to iterate over the
-entire list and also extract and rename three elements: ``VolumeId`` renamed to
-``ID``, ``AvailabilityZone`` renamed to ``AZ``, and ``Size`` will remain
+entire list and also extract and rename three elements: ``VolumeId`` is renamed to
+``ID``, ``AvailabilityZone`` is renamed to ``AZ``, and ``Size`` remains
 ``Size``. We can extract and rename these elements using a ``multi-hash``
 expression placed after the ``wildcard-index`` expression.
 
@@ -110,7 +125,7 @@ expression placed after the ``wildcard-index`` expression.
 
     $data = $result->search('Volumes[*].{ID: VolumeId, AZ: AvailabilityZone, Size: Size}');
 
-This will give us an array of PHP data like the following::
+This gives us an array of PHP data like the following::
 
     array(2) {
       [0] =>
@@ -135,9 +150,9 @@ This will give us an array of PHP data like the following::
 
 In the ``multi-hash`` notation, you can also use chained keys such as
 ``key1.key2[0].key3`` to extract elements deeply nested within the structure.
-The example below demonstrates this with the ``Attachments[0].InstanceId`` key,
-aliased to simply ``InstanceId`` (also note that JMESPath expressions will
-ignore whitespace in most cases).
+The following example demonstrates this with the ``Attachments[0].InstanceId`` key,
+aliased to simply ``InstanceId``. (In most cases, JMESPath expressions will
+ignore whitespace.)
 
 .. code-block:: php
 
@@ -149,7 +164,7 @@ ignore whitespace in most cases).
     $data = $result->search($expr);
     var_dump($data);
 
-The above expression will output the following data::
+The previous expression will output the following data::
 
     array(2) {
       [0] =>
@@ -177,7 +192,7 @@ The above expression will output the following data::
     }
 
 You can also filter multiple elements with the ``multi-list`` expression:\
-``[key1, key2]``. This will format all filtered attributes into a single
+``[key1, key2]``. This formats all filtered attributes into a single
 ordered list per object, regardless of type.
 
 .. code-block:: php
@@ -186,7 +201,7 @@ ordered list per object, regardless of type.
     $data = $result->search($expr);
     var_dump($data);
 
-Running the above search will produce the following data::
+Running the previous search produces the following data::
 
     array(2) {
       [0] =>
@@ -215,35 +230,35 @@ Running the above search will produce the following data::
 
 Use a ``filter`` expression to filter results by the value of a specific field.
 The following example query outputs only volumes in the ``us-west-2a``
-availability zone:
+Availability Zone.
 
 .. code-block:: php
 
     $data = $result->search("Volumes[?AvailabilityZone == 'us-west-2a']");
 
-JMESPath also supports function expressions. Let's say you wanted to run the
+JMESPath also supports function expressions. Let's say you want to run the
 same query as above, but instead retrieve all volumes in which the volume is
-in a region that starts with "us-". The following expression uses the
-``starts_with`` function, passing in a string literal of ``us-``. The result
-of this function is then compared against the JSON literal value of ``true``,
-passing only results of the filter predicate that returned true through the
+in an AWS Region that starts with "us-". The following expression uses the
+``starts_with`` function, passing in a string literal of ``us-``. This function's result
+is then compared against the JSON literal value of ``true``,
+passing only results of the filter predicate that returned ``true`` through the
 filter projection.
 
 .. code-block:: php
 
     $data = $result->search('Volumes[?starts_with(AvailabilityZone, 'us-') == `true`]');
 
-Extracting data from paginators
+Extracting Data from paginators
 -------------------------------
 
-As you know from the :doc:`paginators` guide, ``Aws\ResultPaginator`` objects
-are used to yield results from a pageable API operation. The SDK allows you to
-extract and iterate over filtered data from ``Aws\ResultPaginator`` objects
+As you know from the :doc:`guide_paginators` guide, ``Aws\ResultPaginator`` objects
+are used to yield results from a pageable API operation. The |sdk-php| enables you to
+extract and iterate over filtered data from ``Aws\ResultPaginator`` objects,
 essentially implementing a `flat-map <http://martinfowler.com/articles/collection-pipeline/flat-map.html>`_
 over the iterator in which the result of a JMESPath expression is the map
 function.
 
-Let's say you wanted to created an ``Iterator`` the yields only objects from a
+Let's say you want to create an ``iterator`` that yields only objects from a
 bucket that are larger than 1 MB. This can be achieved by first creating a
 ``ListObjects`` paginator and then applying a ``search()`` function to the
 paginator, creating a flat-mapped iterator over the paginated data.
@@ -253,8 +268,8 @@ paginator, creating a flat-mapped iterator over the paginated data.
     $result = $s3Client->getPaginator('ListObjects', ['Bucket' => 't1234']);
     $filtered = $result->search('Contents[?Size > `1048576`]');
 
-    // the result yielded as $data will be each individual match from
-    // Contents in which the Size attribute is > 1048576.
+    // The result yielded as $data will be each individual match from
+    // Contents in which the Size attribute is > 1048576
     foreach ($filtered as $data) {
         var_dump($data);
     }

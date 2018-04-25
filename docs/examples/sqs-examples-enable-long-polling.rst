@@ -8,110 +8,73 @@
    either express or implied. See the License for the specific language governing permissions and
    limitations under the License.
 
-===================================
-Enabling Long Polling in Amazon SQS
-===================================
+
+==============================
+Enabling Long Polling in |SQS|
+==============================
 
 .. meta::
-   :description:
-   :keywords: Amazon SQS, AWS SDK for PHP examples
+   :description: Enable long polling, retrieve messages with long pulling, and create a long polling queue using the AWS SDK for PHP.
+   :keywords: Amazon SQS code examples for PHP
 
-Long polling reduces the number of empty responses by allowing Amazon SQS to wait a specified time for a message to become available in the queue before sending a response. Also, long polling eliminates false empty responses by querying all of the servers instead of a sampling of servers. To enable long polling, you must specify a non-zero wait time for received messages. To learn more, see `Amazon SQS Long Polling <http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html>`_.
+Long polling reduces the number of empty responses by allowing |SQS| to wait a specified time for a message to become available in the queue before
+sending a response. Also, long polling eliminates false empty responses by querying all of the servers instead of a sampling of servers. To enable
+long polling, you must specify a non-zero wait time for received messages. To learn more, see :SQS-dg:`SQS Long Polling <sqs-long-polling>`.
 
-The examples below show how to:
+The following examples show how to:
 
-* Set attributes on an SQS queue to enable long polling, using `SetQueueAttributes <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#setqueueattributes>`_.
-* Retrieve one or more messages with long polling using `ReceiveMessage <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#receivemessage>`_.
-* Create a long polling queue using `CreateQueue <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#createqueue>`_.
+* Set attributes on an SQS queue to enable long polling, using :aws-php-class:`SetQueueAttributes <api-sqs-2012-11-05.html#setqueueattributes>`.
+* Retrieve one or more messages with long polling using :aws-php-class:`ReceiveMessage <api-sqs-2012-11-05.html#receivemessage>`.
+* Create a long polling queue using :aws-php-class:`CreateQueue <api-sqs-2012-11-05.html#createqueue>`.
 
-All the example code for the AWS SDK for PHP is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 Credentials
 -----------
 
-Before running the example code, configure your AWS credentials, as described in :doc:`/guide/credentials`.
+Before running the example code, configure your AWS credentials. See :doc:`guide_credentials`.
 
 Set Attributes on a Queue to Enable Long Polling
 ------------------------------------------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Sqs\SqsClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/sqs/LongPollingSetQueueAttributes.php
+   :lines: 19-22
+   :language: PHP
 
-    $queueUrl = "QUEUE_URL";
-    $client = new SqsClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2012-11-05'
-    ]);
-    try {
-        $result = $client->setQueueAttributes(array(
-            'Attributes' => [
-                'ReceiveMessageWaitTimeSeconds' => 20
-            ],
-            'QueueUrl' => $queueUrl, // REQUIRED
-        ));
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/sqs/LongPollingSetQueueAttributes.php
+   :lines: 31-50
+   :language: php
 
 Retrieve Messages with Long Polling
 -----------------------------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Sqs\SqsClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/sqs/LongPollingReceiveMessage.php
+   :lines: 19-22
+   :language: PHP
 
-    $queueUrl = "QUEUE_URL";
-    $client = new SqsClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2012-11-05'
-    ]);
-    try {
-        $result = $client->receiveMessage(array(
-            'AttributeNames' => ['SentTimestamp'],
-            'MaxNumberOfMessages' => 1,
-            'MessageAttributeNames' => ['All'],
-            'QueueUrl' => $queueUrl, // REQUIRED
-            'WaitTimeSeconds' => 20,
-        ));
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/sqs/LongPollingReceiveMessage.php
+   :lines: 31-51
+   :language: php
 
 Create a Queue with Long Polling
 --------------------------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Sqs\SqsClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/sqs/LongPollingCreateQueue.php
+   :lines: 19-22
+   :language: PHP
 
-    $queueName = "QUEUE_NAME";
-    $client = new SqsClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2012-11-05'
-    ]);
-    try {
-        $result = $client->createQueue(array(
-            'QueueName' => $queueName,
-            'Attributes' => array(
-                'ReceiveMessageWaitTimeSeconds' => 20
-            ),
-        ));
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/sqs/LongPollingCreateQueue.php
+   :lines: 31-50
+   :language: php

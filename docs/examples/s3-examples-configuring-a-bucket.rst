@@ -8,85 +8,59 @@
    either express or implied. See the License for the specific language governing permissions and
    limitations under the License.
 
-=============================
-Configuring Amazon S3 Buckets
-=============================
+========================
+Configuring |S3| Buckets
+========================
 
 .. meta::
-   :description: Get or set CORS configuration for an Amazon S3 bucket.
-   :keywords: Amazon S3, AWS SDK for PHP examples
+   :description: Get or set CORS configuration for an Amazon S3 bucket using the AWS SDK for PHP.
+   :keywords: Amazon S3 code examples for PHP
 
-Cross-origin resource sharing (CORS) defines a way for client web applications that are loaded in one domain to interact with resources in a different domain. With CORS support in Amazon S3, you can build rich client-side web applications with Amazon S3 and selectively allow cross-origin access to your Amazon S3 resources.
+Cross-origin resource sharing (CORS) defines a way for client web applications that are loaded in one domain to interact with resources in a different domain. With CORS support in |S3|,
+you can build rich client-side web applications with |S3| and selectively allow cross-origin access to your |S3| resources.
 
-For more information about using CORS configuration with an Amazon S3 bucket, see `Cross-Origin Resource Sharing (CORS) <http://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html>`_.
+For more information about using CORS configuration with an |S3| bucket, see :S3-dg:`Cross-Origin Resource Sharing (CORS) <cors>`.
 
-The examples below show how to:
+The following examples show how to:
 
-* Get the CORS configuration for a bucket using `GetBucketCors <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html#getbucketcors>`_.
-* Set the CORS configuration for a bucket using `PutBucketCors <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html#putbucketcors>`_.
+* Get the CORS configuration for a bucket using :aws-php-class:`GetBucketCors <api-s3-2006-03-01.html#getbucketcors>`.
+* Set the CORS configuration for a bucket using :aws-php-class:`PutBucketCors <api-s3-2006-03-01.html#putbucketcors>`.
 
-All the example code for the AWS SDK for PHP is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 Credentials
 -----------
 
-Before running the example code, configure your AWS credentials, as described in :doc:`/guide/credentials`.
+Before running the example code, configure your AWS credentials. See :doc:`guide_credentials`.
 
 Get the CORS Configuration
 --------------------------
 
-.. code-block:: php
+Create a PHP file with following code. First create an AWS.S3 client service, then call the ``getBucketCors`` method and specify the bucket whose CORS configuration you want.
 
-    require 'vendor/autoload.php';
-    use Aws\S3\S3Client;
-    use Aws\Exception\AwsException;
+The only parameter required is the name of the selected bucket. If the bucket currently has a CORS configuration, that configuration is returned by |S3| as a
+:aws-php-class:`CORSRules object </api-s3-2006-03-01.html#shape-corsrule>`.
 
-    $bucketName = 'BUCKET_NAME';
-    $client = new S3Client([
-        'region' => 'us-west-2',
-        'version' => '2006-03-01'
-    ]);
-    try {
-        $result = $client->getBucketCors([
-            'Bucket' => $bucketName, // REQUIRED
-        ]);
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Imports**
+
+.. literalinclude::  example_code/s3/GetBucketCors.php
+   :lines: 19-23
+   :language: PHP
+
+**Sample Code**
+
+.. literalinclude:: example_code/s3/GetBucketCors.php
+   :lines: 31-
+   :language: php
 
 Set the CORS Configuration
 --------------------------
 
-.. code-block:: php
+Create a PHP file with following code. First create an AWS.S3 client service. Then call the ``putBucketCors`` method and specify the bucket whose CORS configuration you want
+to set, and the CORSConfiguration as a :aws-php-class:`CORSRules JSON object </api-s3-2006-03-01.html#shape-corsrule>`.
 
-    require 'vendor/autoload.php';
-    use Aws\S3\S3Client;
-    use Aws\Exception\AwsException;
+**Sample Code**
 
-    $bucketName = 'BUCKET_NAME';
-    $client = new S3Client([
-        'region' => 'us-west-2',
-        'version' => '2006-03-01'
-    ]);
-    try {
-        $result = $client->putBucketCors([
-            'Bucket' => $bucketName, // REQUIRED
-            'CORSConfiguration' => [ // REQUIRED
-                'CORSRules' => [ // REQUIRED
-                    [
-                        'AllowedHeaders' => ['Authorization'],
-                        'AllowedMethods' => ['POST', 'GET', 'PUT'], // REQUIRED
-                        'AllowedOrigins' => ['*'], // REQUIRED
-                        'ExposeHeaders' => [],
-                        'MaxAgeSeconds' => 3000
-                    ],
-                ],
-            ]
-        ]);
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+.. literalinclude:: example_code/s3/PutBucketCors.php
+   :lines: 38-
+   :language: php

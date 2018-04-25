@@ -8,68 +8,40 @@
    either express or implied. See the License for the specific language governing permissions and
    limitations under the License.
 
-=========================================
-Managing Visibility Timeout in Amazon SQS
-=========================================
+====================================
+Managing Visibility Timeout in |SQS|
+====================================
 
 .. meta::
-   :description: Change the visibility timeout for messages in Amazon SQS.
-   :keywords: Amazon SQS, AWS SDK for PHP examples
+   :description: Change the visibility timeout for messages in Amazon SQS using the AWS SDK for PHP.
+   :keywords: Amazon SQS code examples for PHP
 
-A visibility timeout is a period of time during which Amazon SQS prevents other consuming components from receiving and processing a message. To learn more, see `Visibility Timeout <http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html>`_.
+A visibility timeout is a period of time during which |SQS| prevents other consuming components from receiving and processing a message. To learn more, see `Visibility Timeout <http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html>`_.
 
-The example below shows how to:
+The following example shows how to:
 
-* Change the visibility timeout of specified messages in a queue to new values, using `ChangeMessageVisibilityBatch <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#changemessagevisibilitybatch>`_.
 
-All the example code for the AWS SDK for PHP is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
+* Change the visibility timeout of specified messages in a queue to new values, using :aws-php-class:`ChangeMessageVisibilityBatch <api-sqs-2012-11-05.html#changemessagevisibilitybatch>`.
+
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 Credentials
 -----------
 
-Before running the example code, configure your AWS credentials, as described in :doc:`/guide/credentials`.
+Before running the example code, configure your AWS credentials. See :doc:`guide_credentials`.
+
 
 Change the Visibility Timeout of Multiple Messages
 --------------------------------------------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Sqs\SqsClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/sqs/ChangeMessageVisibilityBatch.php
+   :lines: 19-22
+   :language: PHP
 
-    $queueUrl = "QUEUE_URL";
-    $client = new SqsClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2012-11-05'
-    ]);
-    try {
-        $result = $client->receiveMessage(array(
-            'AttributeNames' => ['SentTimestamp'],
-            'MaxNumberOfMessages' => 10,
-            'MessageAttributeNames' => ['All'],
-            'QueueUrl' => $queueUrl, // REQUIRED
-        ));
-        $messages = $result->get('Messages');
-        if ($messages != null) {
-            $entries = array();
-            for ($i = 0; $i < count($messages); $i++) {
-                array_push($entries, [
-                    'Id' => 'unique_is_msg' . $i, // REQUIRED
-                    'ReceiptHandle' => $messages[$i]['ReceiptHandle'], // REQUIRED
-                    'VisibilityTimeout' => 36000
-                ]);
-            }
-            $result = $client->changeMessageVisibilityBatch([
-                'Entries' => $entries,
-                'QueueUrl' => $queueUrl
-            ]);
-            var_dump($result);
-        } else {
-            echo "No messages in queue \n";
-        }
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/sqs/ChangeMessageVisibilityBatch.php
+   :lines: 32-69
+   :language: php

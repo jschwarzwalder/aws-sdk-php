@@ -8,97 +8,70 @@
    either express or implied. See the License for the specific language governing permissions and
    limitations under the License.
 
-=========================
-Using IAM Account Aliases
-=========================
+===========================
+Using |IAM| Account Aliases
+===========================
 
 .. meta::
-   :description: Create, list, and delete aliases for AWS accout IDs using IAM.
-   :keywords: AWS Identity and Access Management, AWS SDK for PHP examples
+   :description: Create, list, and delete aliases for AWS account IDs using AWS Identity and Access Management (IAM).
+   :keywords: AWS Identity and Access Management (IAM) code examples, AWS SDK for PHP
 
 If you want the URL for your sign-in page to contain your company name or other friendly identifier instead of your AWS account ID, you can create an alias for your AWS account ID. If you create an AWS account alias, your sign-in page URL changes to incorporate the alias.
 
-The examples below show how to:
+The following examples show how to:
 
-* Create an alias using `CreateAccountAlias <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-iam-2010-05-08.html#createaccountalias>`_.
-* List the alias associated with the AWS account using `ListAccountAliases <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-iam-2010-05-08.html#listaccountaliases>`_.
-* Delete an alias using `DeleteAccountAlias <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-iam-2010-05-08.html#deleteaccountalias>`_.
+* Create an alias using :aws-php-class:`CreateAccountAlias </api-iam-2010-05-08.html#createaccountalias>`.
+* List the alias associated with the AWS account using :aws-php-class:`ListAccountAliases </api-iam-2010-05-08.html#listaccountaliases>`.
+* Delete an alias using :aws-php-class:`DeleteAccountAlias </api-iam-2010-05-08.html#deleteaccountalias>`.
 
-All the example code for the AWS SDK for PHP is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 Credentials
 -----------
 
-Before running the example code, configure your AWS credentials, as described in :doc:`/guide/credentials`.
+Before running the example code, configure your AWS credentials. See :doc:`guide_credentials`.
 
 Create an Alias
 ---------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Iam\IamClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/iam/CreateAccountAlias.php
+   :lines: 19-22
+   :language: php
 
-    $client = new IamClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2010-05-08'
-    ]);
-    try {
-        $result = $client->createAccountAlias(array(
-            // AccountAlias is required
-            'AccountAlias' => 'string',
-        ));
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/iam/CreateAccountAlias.php
+   :lines: 31-46
+   :language: php
 
 List Account Aliases
 --------------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Iam\IamClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/iam/ListAccountAliases.php
+   :lines: 19-22
+   :language: php
 
-    $client = new IamClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2010-05-08'
-    ]);
-    try {
-        $result = $client->listAccountAliases();
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/iam/ListAccountAliases.php
+   :lines: 31-43
+   :language: php
 
 Delete an Alias
 ---------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Iam\IamClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/iam/DeleteAccountAlias.php
+   :lines: 19-22
+   :language: php
 
-    $client = new IamClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2010-05-08'
-    ]);
-    try {
-        $result = $client->deleteAccountAlias(array(
-            // AccountAlias is required
-            'AccountAlias' => 'string',
-        ));
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/iam/DeleteAccountAlias.php
+   :lines: 31-46
+   :language: php

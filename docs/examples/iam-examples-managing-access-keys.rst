@@ -8,148 +8,107 @@
    either express or implied. See the License for the specific language governing permissions and
    limitations under the License.
 
-========================
-Managing IAM Access Keys
-========================
+==========================
+Managing |IAM| Access Keys
+==========================
 
 .. meta::
    :description: Create, delete, and get information about IAM access keys.
-   :keywords: AWS Identity and Access Management, AWS SDK for PHP examples
+   :keywords: AWS Identity and Access Management (IAM) code examples, AWS SDK for PHP
 
-Users need their own access keys to make programmatic calls to AWS. To fill this need, you can create, modify, view, or rotate access keys (access key IDs and secret access keys) for IAM users. By default, when you create an access key, its status is Active, which means the user can use the access key for API calls.
+Users need their own access keys to make programmatic calls to AWS. To fill this need, you can create, modify, view,
+or rotate access keys (access key IDs and secret access keys) for |IAM| users. By default, when you create an access key, its status is Active. This means the user can use the access key for API calls.
 
-The examples below show how to:
+The following examples show how to:
 
-* Create a secret access key and corresponding access key ID using `CreateAccessKey <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-iam-2010-05-08.html#createaccesskey>`_.
-* Return information about the access key IDs associated with an IAM user using `ListAccessKeys <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-iam-2010-05-08.html#listaccesskeys>`_.
-* Retrieve information about when an access key was last used using `GetAccessKeyLastUsed <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-iam-2010-05-08.html#getaccesskeylastused>`_.
-* Change the status of an access key from Active to Inactive, or vice versa, using `UpdateAccessKey <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-iam-2010-05-08.html#updateaccesskey>`_.
-* Delete an access key pair associated with an IAM user using `DeleteAccessKey <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-iam-2010-05-08.html#deleteaccesskey>`_.
+* Create a secret access key and corresponding access key ID using :aws-php-class:`CreateAccessKey <api-iam-2010-05-08.html#createaccesskey>`.
+* Return information about the access key IDs associated with an |IAM| user using :aws-php-class:`ListAccessKeys <api-iam-2010-05-08.html#listaccesskeys>`.
+* Retrieve information about when an access key was last used using :aws-php-class:`GetAccessKeyLastUsed <api-iam-2010-05-08.html#getaccesskeylastused>`.
+* Change the status of an access key from Active to Inactive, or vice versa, using :aws-php-class:`UpdateAccessKey <api-iam-2010-05-08.html#updateaccesskey>`.
+* Delete an access key pair associated with an |IAM| user using :aws-php-class:`DeleteAccessKey <api-iam-2010-05-08.html#deleteaccesskey>`.
 
-All the example code for the AWS SDK for PHP is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 Credentials
 -----------
 
-Before running the example code, configure your AWS credentials, as described in :doc:`/guide/credentials`.
+Before running the example code, configure your AWS credentials. See :doc:`guide_credentials`.
+
 
 Create an Access Key
 --------------------
 
-.. code-block:: php
 
-    require 'vendor/autoload.php';
-    use Aws\Iam\IamClient;
-    use Aws\Exception\AwsException;
+**Imports**
 
-    $client = new IamClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2010-05-08'
-    ]);
-    try {
-        $result = $client->createAccessKey([
-            'UserName' => 'IAM_USER_NAME',
-        ]);
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+.. literalinclude::  example_code/iam/CreateAccessKey.php
+   :lines: 19-22
+   :language: php
+
+**Sample Code**
+
+.. literalinclude:: example_code/iam/CreateAccessKey.php
+   :lines: 31-45
+   :language: php
+
 
 List Access Keys
 ----------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Iam\IamClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/iam/ListAccessKeys.php
+   :lines: 19-22
+   :language: php
 
-    $client = new IamClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2010-05-08'
-    ]);
-    try {
-        $result = $client->listAccessKeys();
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
 
-Get Info about Access Key's Last Usage
---------------------------------------
+.. literalinclude:: example_code/iam/ListAccessKeys.php
+   :lines: 31-43
+   :language: php
 
-.. code-block:: php
 
-    require 'vendor/autoload.php';
-    use Aws\Iam\IamClient;
-    use Aws\Exception\AwsException;
+Get Information about an Access Key's Last Use
+----------------------------------------------
 
-    $client = new IamClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2010-05-08'
-    ]);
-    try {
-        $result = $client->getAccessKeyLastUsed([
-            'AccessKeyId' => 'ACCESS_KEY_ID', // REQUIRED
-        ]);
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Imports**
+
+.. literalinclude::  example_code/iam/GetAccessKeyLastUsed.php
+   :lines: 19-22
+   :language: php
+
+**Sample Code**
+
+.. literalinclude:: example_code/iam/GetAccessKeyLastUsed.php
+   :lines: 31-45
+   :language: php
 
 Update an Access Key
 --------------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Iam\IamClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/iam/UpdateAccessKey.php
+   :lines: 19-22
+   :language: php
 
-    $client = new IamClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2010-05-08'
-    ]);
-    try {
-        $result = $client->updateAccessKey([
-            'AccessKeyId' => 'ACCESS_KEY_ID', // REQUIRED
-            'Status' => 'Inactive', // REQUIRED
-            'UserName' => 'IAM_USER_NAME',
-        ]);
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/iam/UpdateAccessKey.php
+   :lines: 31-47
+   :language: php
 
 Delete an Access Key
 --------------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Iam\IamClient;
-    use Aws\Exception\AwsException;
+.. literalinclude::  example_code/iam/DeleteAccessKey.php
+   :lines: 19-22
+   :language: php
 
-    $client = new IamClient([
-        'profile' => 'default',
-        'region' => 'us-west-2',
-        'version' => '2010-05-08'
-    ]);
-    try {
-        $result = $client->deleteAccessKey([
-            'AccessKeyId' => 'ACCESS_KEY_ID', // REQUIRED
-            'UserName' => 'IAM_USER_NAME',
-        ]);
-        var_dump($result);
-    } catch (AwsException $e) {
-        // output error message if fails
-        error_log($e->getMessage());
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/iam/DeleteAccessKey.php
+   :lines: 31-46
+   :language: php

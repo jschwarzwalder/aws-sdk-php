@@ -1,16 +1,32 @@
-=========================
-Amazon S3 Presigned POSTs
-=========================
+.. Copyright 2010-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
-Much like pre-signed URLs, pre-signed POSTs allow you to give write access to a
-user without giving them AWS credentials. Presigned POST forms can be created
-with the help of an instance of `Aws\S3\PostObjectV4 <http://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.S3.PostObjectV4.html>`_.
+   This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+   International License (the "License"). You may not use this file except in compliance with the
+   License. A copy of the License is located at http://creativecommons.org/licenses/by-nc-sa/4.0/.
 
-To create an instance of ``PostObjectV4``, you must provide an instance of
-``Aws\S3\S3Client``, a bucket, an associative array of form input fields,
-an array of policy conditions referred in `POST policy document
-<http://docs.aws.amazon.com/AmazonS3/latest/dev/HTTPPOSTForms.html#HTTPPOSTConstructPolicy>`_
-and expiration time string for the policy(optional, 1 hour by default):
+   This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions and
+   limitations under the License.
+
+=====================
+|S3| Pre-Signed POSTs
+=====================
+
+.. meta::
+   :description: Create write access to private |S3| data using the |sdk-php|.
+   :keywords: |S3|, |sdk-php| examples, |S3| for PHP code examples
+
+Much like pre-signed URLs, pre-signed POSTs enable you to give write access to a
+user without giving them AWS credentials. Pre-signed POST forms can be created
+with the help of an instance of :aws-php-class:`Aws\S3\PostObjectV4 </class-Aws.S3.PostObjectV4.html>`.
+
+To create an instance of ``PostObjectV4``, you must provide the following: 
+
+- instance of ``Aws\S3\S3Client``
+- bucket
+- associative array of form input fields
+- array of policy conditions (see :s3-dg:`Policy Construction <HTTPPOSTForms>` in the |S3-dg|)
+- expiration time string for the policy (optional, one hour by default).
 
 .. code-block:: php
 
@@ -45,6 +61,6 @@ and expiration time string for the policy(optional, 1 hour by default):
     $formAttributes = $postObject->getFormAttributes();
 
     // Get form input fields. This will include anything set as a form input in
-    // the constructor, the provided JSON policy, your AWS Access Key ID, and an
+    // the constructor, the provided JSON policy, your AWS access key ID, and an
     // auth signature.
     $formInputs = $postObject->getFormInputs();

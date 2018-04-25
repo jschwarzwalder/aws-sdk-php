@@ -8,105 +8,66 @@
    either express or implied. See the License for the specific language governing permissions and
    limitations under the License.
 
-====================================
-Creating and Using Amazon S3 Buckets
-====================================
+===============================
+Creating and Using |S3| Buckets
+===============================
 
 .. meta::
-   :description:
-   :keywords: Amazon S3, AWS SDK for PHP examples
+   :description: Describes how to use Amazon S3 buckets with the AWS SDK for PHP.
+   :keywords: Amazon S3 code examples for PHP
 
-The examples below show how to:
+The following examples show how to:
 
-* Return a list of buckets owned by the authenticated sender of the request using `ListBuckets <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html#listbuckets>`_.
-* Create a new bucket using `CreateBucket <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html#createbucket>`_.
-* Add an object to a bucket using `PutObject <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html#putobject>`_.
+* Return a list of buckets owned by the authenticated sender of the request using :aws-php-class:`ListBuckets <api-s3-2006-03-01.html#listbuckets>`.
+* Create a new bucket using :aws-php-class:`CreateBucket <api-s3-2006-03-01.html#createbucket>`.
+* Add an object to a bucket using :aws-php-class:`PutObject <api-s3-2006-03-01.html#putobject>`.
 
-All the example code for the AWS SDK for PHP is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 Credentials
 -----------
 
-Before running the example code, configure your AWS credentials, as described in :doc:`/guide/credentials`.
+Before running the example code, configure your AWS credentials, as described in :doc:`guide_credentials`. Then import the |sdk-php|.
+
+**Imports**
+
+.. literalinclude::  example_code/s3/ListBuckets.php
+   :lines: 20-23
+   :language: PHP
+
 
 List Buckets
 ------------
 
-.. code-block:: php
+Create a PHP file with the following code. First create an AWS.S3 client service that specifies the AWS Region and version. Then call the ``listBuckets`` method, which returns all |s3| buckets owned by the sender of the request as an array of Bucket structures.
 
-    require 'vendor/autoload.php';
-    use Aws\S3\S3Client;
-    use Aws\Exception\AwsException;
+**Sample Code**
 
-    //Create a S3Client
-    $s3Client = new S3Client([
-        'region' => 'us-west-2',
-        'version' => '2006-03-01'
-    ]);
-    //Listing all S3 Bucket
-    $buckets = $s3Client->listBuckets();
-    foreach ($buckets['Buckets'] as $bucket){
-    	echo $bucket['Name']."\n";
-    }
+.. literalinclude:: example_code/s3/ListBuckets.php
+   :lines: 32-
+   :language: php
 
 Create a Bucket
 ---------------
 
-.. code-block:: php
+Create a PHP file with following code. First create an AWS.S3 client service that specifies the AWS Region and version. Then call the ``createBucket`` method with an array as the parameter. The only required field is the key 'Bucket', with a string value for the bucket name you want to create. However, you can specify the AWS Region with the 'CreateBucketConfiguration' field.  If successful, this method returns the 'Location' of the bucket.
 
-    require 'vendor/autoload.php';
-    use Aws\S3\S3Client;
-    use Aws\Exception\AwsException;
+**Sample Code**
 
-    $BUCKET_NAME='<BUCKET-NAME>';
-    //Create a S3Client
-    $s3Client = new S3Client([
-        'region' => 'us-west-2',
-        'version' => '2006-03-01'
-    ]);
-    //Creating S3 Bucket
-    try {
-        $result = $s3Client->createBucket([
-            'Bucket' => $BUCKET_NAME,
-        ]);
-    }catch (AwsException $e) {
-        // output error message if fails
-        echo $e->getMessage();
-        echo "\n";
-    }
+.. literalinclude:: example_code/s3/CreateBucket.php
+   :lines: 31-
+   :language: php
 
 Put an Object in a Bucket
 -------------------------
 
-.. code-block:: php
+To add files to your new bucket, create a PHP file with the following code.
 
-    require 'vendor/autoload.php';
-    use Aws\S3\S3Client;
-    use Aws\Exception\AwsException;
+In your command line execute this file and pass in the name of the bucket where you want to upload your file as a string, followed by the full file path to the file you want to upload.
 
-    $USAGE = "\n" .
-        "To run this example, supply the name of an S3 bucket and a file to\n" .
-        "upload to it.\n" .
-        "\n" .
-        "Ex: php PutObject.php <bucketname> <filename>\n";
-    if (count($argv) <= 2){
-        echo $USAGE;
-        exit();
-    }
-    $bucket = $argv[1];
-    $file_Path = $argv[2];
-    $key = basename($argv[2]);
-    try{
-        //Create a S3Client
-        $s3Client = new S3Client([
-            'region' => 'us-west-2',
-            'version' => '2006-03-01'
-        ]);
-        $result = $s3Client->putObject([
-            'Bucket'     => $bucket,
-            'Key'        => $key,
-            'SourceFile' => $file_Path,
-        ]);
-    } catch (S3Exception $e) {
-        echo $e->getMessage() . "\n";
-    }
+**Sample Code**
+
+.. literalinclude:: example_code/s3//PutObject.php
+   :lines: 31-
+   :language: php
+

@@ -8,76 +8,41 @@
    either express or implied. See the License for the specific language governing permissions and
    limitations under the License.
 
-======================================
-Working with Amazon S3 Bucket Policies
-======================================
+=================================
+Working with |S3| Bucket Policies
+=================================
 
 .. meta::
-   :description: Return, replace, or delete Amazon S3 bucket policies.
-   :keywords: Amazon S3, AWS SDK for PHP examples
+   :description: Return, replace, or delete Amazon S3 bucket policies using the AWS SDK for PHP.
+   :keywords: Amazon S3 code examples for PHP
 
-You can use a bucket policy to grant permission to your Amazon S3 resources. To learn more, see `Using Bucket Policies and User Policies <http://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html>`_.
+You can use a bucket policy to grant permission to your |S3| resources. To learn more, see `Using Bucket Policies and User Policies <http://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html>`_.
 
-The example below shows how to:
+The following example shows how to:
 
-* Return the policy for a specified bucket using `GetBucketPolicy <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html#getbucketpolicy>`_.
-* Replace a policy on a bucket using `PutBucketPolicy <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html#putbucketpolicy>`_.
-* Delete a policy from a bucket using `DeleteBucketPolicy <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html#deletebucketpolicy>`_.
+* Return the policy for a specified bucket using :aws-php-class:`GetBucketPolicy <api-s3-2006-03-01.html#getbucketpolicy>`.
+* Replace a policy on a bucket using :aws-php-class:`PutBucketPolicy <api-s3-2006-03-01.html#putbucketpolicy>`.
+* Delete a policy from a bucket using :aws-php-class:`DeleteBucketPolicy <api-s3-2006-03-01.html#deletebucketpolicy>`.
 
-All the example code for the AWS SDK for PHP is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 Credentials
 -----------
 
-Before running the example code, configure your AWS credentials, as described in :doc:`/guide/credentials`.
+Before running the example code, configure your AWS credentials. See :doc:`guide_credentials`.
+
 
 Get, Delete, and Replace a Policy on a Bucket
 ---------------------------------------------
 
-.. code-block:: php
+**Imports**
 
-    require "vendor/autoload.php";
-    use Aws\S3\S3Client;
-    use Aws\Exception\AwsException;
-    // Create a S3Client
-    $s3Client = new S3Client([
-        'region' => 'us-west-2',
-        'version' => '2006-03-01'
-    ]);
-    $bucket = 'my-s3-bucket';
-    // Get the policy of a specific bucket
-    try {
-        $resp = $s3Client->getBucketPolicy([
-            'Bucket' => $bucket
-        ]);
-        echo "Succeed in receiving bucket policy:\n";
-        echo $resp->get('Policy');
-        echo "\n";
-    } catch (AwsException $e) {
-        // Display error message
-        echo $e->getMessage();
-        echo "\n";
-    }
-    // Deletes the policy from the bucket
-    try {
-        $resp = $s3Client->deleteBucketPolicy([
-            'Bucket' => $bucket
-        ]);
-        echo "Succeed in deleting policy of bucket: " . $bucket . "\n";
-    } catch (AwsException $e) {
-        // Display error message
-        echo $e->getMessage();
-        echo "\n";
-    }
-    // Replaces a policy on the bucket
-    try {
-        $resp = $s3Client->putBucketPolicy([
-            'Bucket' => $bucket,
-            'Policy' => 'foo policy',
-        ]);
-        echo "Succeed in put a policy on bucket: " . $bucket . "\n";
-    } catch (AwsException $e) {
-        // Display error message
-        echo $e->getMessage();
-        echo "\n";
-    }
+.. literalinclude::  example_code/s3/s3BucketPolicy.php
+   :lines: 20-23
+   :language: PHP
+
+**Sample Code**
+
+.. literalinclude:: example_code/s3/s3BucketPolicy.php
+   :lines: 25-
+   :language: php

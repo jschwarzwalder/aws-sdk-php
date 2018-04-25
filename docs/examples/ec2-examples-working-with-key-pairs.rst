@@ -9,82 +9,73 @@
    limitations under the License.
 
 =================================
-Working with Amazon EC2 Key Pairs
+Working with |EC2| Key Pairs
 =================================
 
 .. meta::
-   :description: Create and delete key pairs for Amazon EC2.
-   :keywords: Amazon EC2, AWS SDK for PHP examples
+   :description: Create and delete key pairs for Amazon EC2 using the AWS SDK for PHP.
+   :keywords: Amazon EC2 code examples for PHP
 
-Amazon EC2 uses public–key cryptography to encrypt and decrypt login information. Public–key cryptography uses a public key to encrypt data; then the recipient uses the private key to decrypt the data. The public and private keys are known as a key pair.
+|EC2| uses public–key cryptography to encrypt and decrypt login information. Public–key cryptography uses
+a public key to encrypt data. Then the recipient uses the private key to decrypt the data. The public and
+private keys are known as a key pair.
 
-The examples below show how to:
+The following examples show how to:
 
-* Create a 2048-bit RSA key pair using `CreateKeyPair <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-ec2-2016-11-15.html#createkeypair>`_.
-* Delete a specified key pair using `DeleteKeyPair <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-ec2-2016-11-15.html#deletekeypair>`_.
-* Describe one or more of your key pairs using `DescribeKeyPairs <http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-ec2-2016-11-15.html#describekeypairs>`_.
+* Create a 2048-bit RSA key pair using :aws-php-class:`CreateKeyPair </api-ec2-2016-11-15.html#createkeypair>`.
+* Delete a specified key pair using :aws-php-class:`DeleteKeyPair </api-ec2-2016-11-15.html#deletekeypair>`.
+* Describe one or more of your key pairs using :aws-php-class:`DescribeKeyPairs </api-ec2-2016-11-15.html#describekeypairs>`.
 
-All the example code for the AWS SDK for PHP is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
+All the example code for the |sdk-php| is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/php/example_code>`_.
 
 Credentials
 -----------
 
-Before running the example code, configure your AWS credentials, as described in :doc:`/guide/credentials`.
+Before running the example code, configure your AWS credentials. See :doc:`guide_credentials`.
 
 Create a Key Pair
 -----------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Ec2\Ec2Client;
+.. literalinclude::  example_code/ec2/CreateKeyPair.php
+   :lines: 19-21
+   :language: php
 
-    $ec2Client = new Ec2Client([
-        'region' => 'us-west-2',
-        'version' => '2016-11-15',
-        'profile' => 'default'
-    ]);
-    $keyPairName = 'my-keypair';
-    $result = $ec2Client->createKeyPair(array(
-        'KeyName' => $keyPairName
-    ));
-    // Save the private key
-    $saveKeyLocation = getenv('HOME') . "/.ssh/{$keyPairName}.pem";
-    file_put_contents($saveKeyLocation, $result['keyMaterial']);
-    // Update the key's permissions so it can be used with SSH
-    chmod($saveKeyLocation, 0600);
+**Sample Code**
+
+.. literalinclude:: example_code/ec2/CreateKeyPair.php
+   :lines: 30-47
+   :language: php
+
 
 Delete a Key Pair
 -----------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Ec2\Ec2Client;
+.. literalinclude::  example_code/ec2/DeleteKeypair.php
+   :lines: 19-21
+   :language: php
 
-    $ec2Client = new Ec2Client([
-        'region' => 'us-west-2',
-        'version' => '2016-11-15',
-        'profile' => 'default'
-    ]);
-    $keyPairName = 'my-keypair';
-    $result = $ec2Client->deleteKeyPair(array(
-        'KeyName' => $keyPairName
-    ));
-    var_dump($result);
+**Sample Code**
+
+.. literalinclude:: example_code/ec2/DeleteKeypair.php
+   :lines: 30-43
+   :language: php
+
 
 Describe Key Pairs
 ------------------
 
-.. code-block:: php
+**Imports**
 
-    require 'vendor/autoload.php';
-    use Aws\Ec2\Ec2Client;
+.. literalinclude::  example_code/ec2/DescribeKeyPairs.php
+   :lines: 19-21
+   :language: php
 
-    $ec2Client = new Ec2Client([
-        'region' => 'us-west-2',
-        'version' => '2016-11-15',
-        'profile' => 'default'
-    ]);
-    $result = $ec2Client->describeKeyPairs();
-    var_dump($result);
+**Sample Code**
+
+.. literalinclude:: example_code/ec2/DescribeKeyPairs.php
+   :lines: 30-38
+   :language: php

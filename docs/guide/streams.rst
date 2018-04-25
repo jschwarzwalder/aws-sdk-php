@@ -1,14 +1,28 @@
-=======
-Streams
-=======
+.. Copyright 2010-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+   This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+   International License (the "License"). You may not use this file except in compliance with the
+   License. A copy of the License is located at http://creativecommons.org/licenses/by-nc-sa/4.0/.
+
+   This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions and
+   limitations under the License.
+
+========================
+Streams in the |sdk-php|
+========================
+
+.. meta::
+   :description: Creating a Guzzle stream decorator with the AWS SDK for PHP.
+   :keywords: AWS SDK for PHP, steam decorators, guzzle, PHP for AWS
 
 As part of its integration of the `PSR-7 <http://www.php-fig.org/psr/psr-7/>`_
-HTTP message standard, the AWS SDK for PHP uses the `PSR-7 StreamInterface
-<http://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Psr.Http.Message.StreamInterface.html>`_
+HTTP message standard, the |sdk-php| uses the :aws-php-class:`PSR-7 StreamInterface
+</class-Psr.Http.Message.StreamInterface.html>`
 internally as its abstraction over `PHP streams
 <http://php.net/manual/en/intro.stream.php>`_. Any command with an input field
-defined as a blob, such as the ``Body`` parameter on an `S3::PutObject command
-<http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-s3-2006-03-01.html#putobject>`_,
+defined as a blob, such as the ``Body`` parameter on an :aws-php-class:`S3::PutObject command
+</api-s3-2006-03-01.html#putobject>`,
 can be satisfied with a string, a PHP stream resource, or an instance of
 ``Psr\Http\Message\StreamInterface``.
 
@@ -28,16 +42,16 @@ can be satisfied with a string, a PHP stream resource, or an instance of
 Stream Decorators
 -----------------
 
-Guzzle provides several stream decorators that can be used to control how the
+Guzzle provides several stream decorators that you can use to control how the
 SDK and Guzzle interact with the streaming resource provided as an input
-parameter to a command. These decorators can modify how handlers will be able
+parameter to a command. These decorators can modify how handlers are able
 to read and seek on a given stream. The following is a partial list; more can be
 found on the `GuzzleHttp\Psr7 repository <https://github.com/guzzle/psr7>`_.
 
 AppendStream
 ~~~~~~~~~~~~
 
-`GuzzleHttp\\Psr7\\AppendStream <http://docs.aws.amazon.com/aws-sdk-php/v3/api/class-GuzzleHttp.Psr7.AppendStream.html>`_
+:aws-php-class:`GuzzleHttp\\Psr7\\AppendStream </class-GuzzleHttp.Psr7.AppendStream.html>`
 
 Reads from multiple streams, one after the other.
 
@@ -56,9 +70,9 @@ Reads from multiple streams, one after the other.
 CachingStream
 ~~~~~~~~~~~~~
 
-`GuzzleHttp\\Psr7\\CachingStream <http://docs.aws.amazon.com/aws-sdk-php/v3/api/class-GuzzleHttp.Psr7.CachingStream.html>`_
+:aws-php-class:`GuzzleHttp\\Psr7\\CachingStream </class-GuzzleHttp.Psr7.CachingStream.html>`
 
-The CachingStream is used to allow seeking over previously read bytes on
+Used to allow seeking over previously read bytes on
 non-seekable streams. This can be useful when transferring a non-seekable
 entity body fails due to needing to rewind the stream (for example, resulting
 from a redirect). Data that is read from the remote stream will be buffered in
@@ -83,22 +97,22 @@ then on disk.
 InflateStream
 ~~~~~~~~~~~~~
 
-`GuzzleHttp\\Psr7\\InflateStream <http://docs.aws.amazon.com/aws-sdk-php/v3/api/class-GuzzleHttp.Psr7.InflateStream.html>`_
+:aws-php-class:`GuzzleHttp\\Psr7\\InflateStream </class-GuzzleHttp.Psr7.InflateStream.html>`
 
-Uses PHP's zlib.inflate filter to inflate deflate or gzipped content.
+Uses PHP's zlib.inflate filter to inflate or deflate gzipped content.
 
 This stream decorator skips the first 10 bytes of the given stream to remove
 the gzip header, converts the provided stream to a PHP stream resource,
-then appends the zlib.inflate filter. The stream is then converted back
+and then appends the zlib.inflate filter. The stream is then converted back
 to a Guzzle stream resource to be used as a Guzzle stream.
 
 LazyOpenStream
 ~~~~~~~~~~~~~~
 
-`GuzzleHttp\\Psr7\\LazyOpenStream <http://docs.aws.amazon.com/aws-sdk-php/v3/api/class-GuzzleHttp.Psr7.LazyOpenStream.html>`_
+:aws-php-class:`GuzzleHttp\\Psr7\\LazyOpenStream </class-GuzzleHttp.Psr7.LazyOpenStream.html>`
 
-Lazily reads or writes to a file that is opened only after an IO operation
-take place on the stream.
+Lazily reads or writes to a file that is opened only after an I/O operation
+takes place on the stream.
 
 .. code-block:: php
 
@@ -113,11 +127,11 @@ take place on the stream.
 LimitStream
 ~~~~~~~~~~~
 
-`GuzzleHttp\\Psr7\\LimitStream <http://docs.aws.amazon.com/aws-sdk-php/v3/api/class-GuzzleHttp.Psr7.LimitStream.html>`_
+:aws-php-class:`GuzzleHttp\\Psr7\\LimitStream </class-GuzzleHttp.Psr7.LimitStream.html>`
 
-LimitStream can be used to read a subset or slice of an existing stream object.
+Used to read a subset or slice of an existing stream object.
 This can be useful for breaking a large file into smaller pieces to be sent in
-chunks (e.g. Amazon S3's multipart upload API).
+chunks (e.g., the |S3| Multipart Upload API).
 
 .. code-block:: php
 
@@ -137,9 +151,9 @@ chunks (e.g. Amazon S3's multipart upload API).
 NoSeekStream
 ~~~~~~~~~~~~
 
-`GuzzleHttp\\Psr7\\NoSeekStream <http://docs.aws.amazon.com/aws-sdk-php/v3/api/class-GuzzleHttp.Psr7.NoSeekStream.html>`_
+:aws-php-class:`GuzzleHttp\\Psr7\\NoSeekStream </class-GuzzleHttp.Psr7.NoSeekStream.html>`
 
-NoSeekStream wraps a stream and does not allow seeking.
+Wraps a stream and does not allow seeking.
 
 .. code-block:: php
 
@@ -159,9 +173,9 @@ NoSeekStream wraps a stream and does not allow seeking.
 PumpStream
 ~~~~~~~~~~
 
-`GuzzleHttp\\Psr7\\PumpStream <http://docs.aws.amazon.com/aws-sdk-php/v3/api/class-GuzzleHttp.Psr7.PumpStream.html>`_
+:aws-php-class:`GuzzleHttp\\Psr7\\PumpStream </class-GuzzleHttp.Psr7.PumpStream.html>`
 
-Provides a read only stream that pumps data from a PHP callable.
+Provides a read-only stream that pumps data from a PHP callable.
 
 When invoking the provided callable, the PumpStream will pass the amount of
 data requested to read to the callable. The callable can choose to ignore
@@ -170,12 +184,12 @@ returned by the provided callable is buffered internally until drained using
 the read() function of the PumpStream. The provided callable MUST return
 false when there is no more data to read.
 
-Implementing stream decorators
+Implementing Stream Decorators
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Creating a stream decorator is very easy thanks to the
-`GuzzleHttp\\Psr7\\StreamDecoratorTrait
-<http://docs.aws.amazon.com/aws-sdk-php/v3/api/class-GuzzleHttp.Psr7.StreamDecoratorTrait.html>`_.
+:aws-php-class:`GuzzleHttp\\Psr7\\StreamDecoratorTrait
+</class-GuzzleHttp.Psr7.StreamDecoratorTrait.html>`.
 This trait provides methods that implement ``Psr\Http\Message\StreamInterface``
 by proxying to an underlying stream. Just ``use`` the ``StreamDecoratorTrait``
 and implement your custom methods.
@@ -205,7 +219,7 @@ byte is read from a stream. This could be implemented by overriding the
         {
             $result = $this->stream->read($length);
 
-            // Invoke the callback when EOF is hit.
+            // Invoke the callback when EOF is hit
             if ($this->eof()) {
                 call_user_func($this->callback);
             }
@@ -214,7 +228,7 @@ byte is read from a stream. This could be implemented by overriding the
         }
     }
 
-This decorator could be added to any existing stream and used like so:
+This decorator could be added to any existing stream and used like this.
 
 .. code-block:: php
 
@@ -232,4 +246,3 @@ This decorator could be added to any existing stream and used like so:
     $eofStream->seek(0);
     $eofStream->read(3);
     // echoes "EOF!"
-
